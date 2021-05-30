@@ -97,6 +97,7 @@ namespace text1
 
             Introduction::NamespaceExample nameItem = new Introduction.NamespaceExample();  // :: 名称空间修饰符 
 
+            #region 类
             //Person p = new Person();
             //Console.WriteLine(p);
             //Console.WriteLine(p.Id);
@@ -127,14 +128,30 @@ namespace text1
             ////个数可变参数方法,Count方法使用params关键字定义参数  类型为整型数组，即可以传递一个整型数组
             //Console.WriteLine(pp.Count(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).ToString());
 
-            //静态构造函数
-            string colorStr = UserPreference.BackColor.ToString();
-            int colorIntger = (int)UserPreference.BackColor;
+            ////静态构造函数
+            //string colorStr = UserPreference.BackColor.ToString();
+            //int colorIntger = (int)UserPreference.BackColor;
 
-            Console.WriteLine($"colorStr is {colorStr}");
-            Console.WriteLine($"colorIntger is {colorIntger.ToString()}");
+            //Console.WriteLine($"colorStr is {colorStr}");
+            //Console.WriteLine($"colorIntger is {colorIntger.ToString()}");
+
+            #endregion
+
 
             Console.ReadKey();
         }
+
+        //创建结构体struct 测试VPN代理            
+        public struct Dimensions
+        {
+            public double Length { get; set; }
+            public double Width { get; set; }
+            public Dimensions(double length, double width)
+            {
+                Length = length;
+                Width = width;
+            }
+        }
+
     }
 }

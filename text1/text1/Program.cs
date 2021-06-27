@@ -137,6 +137,53 @@ namespace text1
 
             #endregion
 
+            #region 结构体 struct
+            //结构体，属于值类型，但是语法上可以当做是类来处理
+            //结构声明方式1
+            //var dim = new Dimensions(); /* 注意，这里因为结构是一个值类型，所以此时的new不同与类或其他引用类型的工作方式；
+            //                            这里new并没用分配堆到内存中，而只是调用了相对应的[构造函数]，根据传递的参数，初始化所有字段；*/
+            //dim.Length = 11;
+            //dim.Width = 5;
+            //结构声明方式
+            //Dimensions point = new Dimensions();
+            //point.Length = 12;
+            //point.Width = 4;
+            //var area = point.Length * point.Width;
+
+
+            #endregion
+
+            #region 部分类 partial
+
+            //SampleClass sam = new SampleClass();
+            //sam.MethodOne();    //调用方法1
+            //sam.MethodTwo();    //调用方法2
+
+            #endregion
+
+            #region 扩展方法
+            /* 
+             * 扩展方法为静态方法，且使用标准仍然与标准的实例方法相同
+             */
+
+            //string str1 = "dfdfer ejjnfd kfd" + "9487854455454 time";
+            //string str2 = "Forst Xu";
+            //int count = str1.GetWordCount();
+            //Console.WriteLine(count);
+            //count = str2.GetWordCount();
+            //Console.WriteLine($"Now the count of str2 is {count}");
+
+
+            #endregion
+
+            #region 泛型
+
+            //泛型允许更好的重用二进制代码；泛型类可以定义一次，并且可以用许多不同的类型实例化；
+
+
+
+            #endregion
+
 
             Console.ReadKey();
         }
@@ -152,6 +199,8 @@ namespace text1
                 Width = width;
             }
         }
+
+
 
     }
 }

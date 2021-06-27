@@ -123,6 +123,29 @@ namespace CommonClass
         Black
     }
 
+    //部分类
+    public partial class SampleClass
+    {
+        public void MethodOne()
+        {
+            Console.WriteLine("MethodOne.");
+        }
 
+    }
 
+    public partial class SampleClass
+    {
+
+        public void MethodTwo()
+        {
+            Console.WriteLine("MethodTwo");
+        }
+    }
+
+    //扩展方法
+    public static class StringExtension
+    {
+        public static int GetWordCount(this string str) => str.Split().Length;
+
+    }
 }

@@ -179,10 +179,97 @@ namespace text1
             #region 泛型
 
             //泛型允许更好的重用二进制代码；泛型类可以定义一次，并且可以用许多不同的类型实例化；
+            #endregion
+
+            #region 数组Array
+            //声明数组变量，数组是一个引用类型，声明后必须分配堆地址
+            int[] intArray1 = { };          //空数组
+            int[] intArray2 = new int[4];
+            int[] intArray3 = new int[4] { 0, 1, 2, 3, };
+            int[] intArray4 = { 4, 5, 6, 7 };
+
+            //访问数组元素
+            for (int i = 0; i < intArray3.Length; i++)
+            {
+                Console.WriteLine($"在intArray3中，第{i}个元素值为{intArray3[i]};");
+            }
+
+            //对象为Person的数组
+            //1声明数组变量，2为数组对象分配引用地址，即是初始化
+            Person[] myPersons = new Person[2];
+            myPersons[0] = new Person("绯色", "香料", 22);
+            myPersons[1] = new Person("锤子", "锤到你服帖", 30);
+
+            Person[] myPlayer = new Person[] {
+                new Person("绯色", "香料", 22),
+                new Person("锤子", "锤到你服帖", 30)
+            };
 
 
+            //多维数组
+            int[,] twodim = new int[3, 3];
+            twodim[0, 0] = 0;
+            twodim[0, 1] = 1;
+            twodim[0, 2] = 2;
+
+            twodim[1, 0] = 3;
+            twodim[1, 1] = 4;
+            twodim[1, 2] = 5;
+
+            twodim[2, 0] = 6;
+            twodim[2, 1] = 7;
+            twodim[2, 2] = 8;
+
+            //如果事先知道数组元素的值，可以直接使用索引器来初始化二维数组，如下
+            int[,] twodim1 = {
+                {0,1,2 },
+                {3,4,5 },
+                {6,7,8 }
+            };
+
+            int[][] twodim2 = new int[3][];
+            twodim2[0] = new int[] { 0, 1, 2 };
+            twodim2[1] = new int[] { 3, 4, 5, 6, 7, 8 };
+            twodim2[2] = new int[] { 9, 10, 11 };
+            //for (int i = 0; i < twodim2.Length; i++)
+            //{
+
+            //    //i对应的是二维数组twodim2的第几行
+            //    for (int j = 0; j < twodim2[i].Length; j++)
+            //    {
+            //        Console.Write(twodim2[i][j].ToString());
+            //        Console.Write("\t");
+            //    }
+            //    Console.Write("\n");
+            //}
+
+
+            //Console.WriteLine($"数组twodim1的维数为{twodim1.Rank}");
 
             #endregion
+
+            //使用Array类Creat方法构建数组
+            Array arrayTemp = Array.CreateInstance(typeof(int), 5);
+            for (int i = 0; i < arrayTemp.Length; i++)
+            {
+                arrayTemp.SetValue(33, i);
+            }
+
+            for (int i = 0; i < arrayTemp.Length; i++)
+            {
+                Console.WriteLine(arrayTemp.GetValue(i));
+            }
+
+            //复制数组，数组实现ICloneable接口，可以使用Clone()方法复制数组
+            int[] intAry = { 1, 2 };
+            int[] intAryClone = intAry.Clone() as int[]; //Clone()方法返回Object对象，则需要根据目标的类型进行显示类型转换
+            Console.WriteLine("完成数组intAryClone的复制");
+
+            for (int i = 0; i < intAryClone.Length; i++)
+            {
+                Console.WriteLine($"intAryClone数组的第{i}个元素值为：{intAryClone[i]}");
+            }
+
 
 
             Console.ReadKey();
@@ -200,6 +287,26 @@ namespace text1
             }
         }
 
+
+        public class Person
+        {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public int Age { get; set; }
+
+            public Person(string firstName, string lastName, int age)
+            {
+                FirstName = firstName;
+                LastName = lastName;
+                Age = age;
+            }
+
+            //public override string ToString()
+            //{
+            //    return $"{FirstName}-{LastName}";
+            //}
+            public override string ToString() => $"{FirstName}-{LastName}";
+        }
 
 
     }

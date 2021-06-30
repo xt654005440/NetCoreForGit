@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CommonClass\CommonClass.csproj" />
+    <ProjectReference Include="..\Forest.ProCharp.Generic\Forest.ProCharp.Generic.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Buffers;
 using CommonClass;
+using Forest.ProCharp.Generic;
 using Introduction = CommonClass;
 
 namespace text1
@@ -246,29 +248,76 @@ namespace text1
 
             //Console.WriteLine($"数组twodim1的维数为{twodim1.Rank}");
 
-            #endregion
 
             //使用Array类Creat方法构建数组
-            Array arrayTemp = Array.CreateInstance(typeof(int), 5);
-            for (int i = 0; i < arrayTemp.Length; i++)
+            //Array arrayTemp = Array.CreateInstance(typeof(int), 5);
+            //for (int i = 0; i < arrayTemp.Length; i++)
+            //{
+            //    arrayTemp.SetValue(33, i);
+            //}
+
+            //for (int i = 0; i < arrayTemp.Length; i++)
+            //{
+            //    Console.WriteLine(arrayTemp.GetValue(i));
+            //}
+
+            ////复制数组，数组实现ICloneable接口，可以使用Clone()方法复制数组
+            //int[] intAry = { 1, 2 };
+            //int[] intAryClone = intAry.Clone() as int[]; //Clone()方法返回Object对象，则需要根据目标的类型进行显示类型转换
+            //Console.WriteLine("完成数组intAryClone的复制");
+
+            //for (int i = 0; i < intAryClone.Length; i++)
+            //{
+            //    Console.WriteLine($"intAryClone数组的第{i}个元素值为：{intAryClone[i]}");
+            //}
+
+
+
+            #endregion
+
+            #region 枚举  IEnumerable接口 foreach  yield 
+
+            /*foreach语句中使用枚举，可以迭代集合中的元素，且不需要知道集合中的元素个数；
+            数组和集合，均实现了带GetEnumerator()方法的IEnumerable接口。
+            GetEnumerator()方法返回一个实现了IEnumerator接口的枚举。
+            接着，foreach语句通过使用IEnumerator接口迭代集合。
+            */
+
+            //yield语句
+            //C#2.0中加入了yeild语句，以便创建枚举器；
+            //yield return 返回集合的一个元素，并移动到下一个元素上；
+            //yield break 可以停止迭代
+
+            //创建了一个HelloCollection的集合类，该类实现了GetEnumerator()方法，使用foreach语句进行遍历
+            //目标输出 HelloWorld
+            var hello = new HelloCollection();
+            foreach (var item in hello)
             {
-                arrayTemp.SetValue(33, i);
+                Console.Write(item);
             }
 
-            for (int i = 0; i < arrayTemp.Length; i++)
-            {
-                Console.WriteLine(arrayTemp.GetValue(i));
-            }
+            #endregion
 
-            //复制数组，数组实现ICloneable接口，可以使用Clone()方法复制数组
-            int[] intAry = { 1, 2 };
-            int[] intAryClone = intAry.Clone() as int[]; //Clone()方法返回Object对象，则需要根据目标的类型进行显示类型转换
-            Console.WriteLine("完成数组intAryClone的复制");
+            #region 数组池
+            //为什要有数组池这个东西？
+            //如果一个应用程序创建并销毁了许多数组，垃圾回收就用一些工作要做了；
+            //为了减少垃圾收集器的工作，可以通过ArrayPool类使用数组池；
+            //ArrayPool管理一个数组池，数组可以从这里租借，并返回到池中，内存在ArrayPool中管理。
 
-            for (int i = 0; i < intAryClone.Length; i++)
-            {
-                Console.WriteLine($"intAryClone数组的第{i}个元素值为：{intAryClone[i]}");
-            }
+            //创建数组池,是用creat方法;设定数组最大长度和数组数量；
+            //maxArrayLength 默认值是1024*1024字节 ，maxArraysPerBucket 默认值是50
+            ArrayPool<int> intPool = ArrayPool<int>.Create(maxArrayLength: 4000, maxArraysPerBucket: 10);
+
+            //通过访问ArrayPool<T>类的共享属性，来使用预定义的共享池
+            ArrayPool<int> shardPool = ArrayPool<int>.Shared;
+
+            //如果请求的数组大小不符合池中管理的数组，这时候就会返回一个较大长度的数组
+            //如下，请求长度为100，返回的数组长度为128
+            int arrLength = 100;
+            int[] arr = ArrayPool<int>.Shared.Rent(arrLength); //向预定义的共享数组池中请求长度为arrlength的数组
+            Console.WriteLine($"请求一个长度为{arrLength}的数组" + $",并且返回长度为{arr.Length}");
+
+            #endregion
 
 
 

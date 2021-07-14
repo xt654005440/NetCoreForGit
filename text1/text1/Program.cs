@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Buffers;
+using System.Text;
+using System.Text.RegularExpressions;
 using CommonClass;
 using Forest.ProCharp.Generic;
 using Introduction = CommonClass;
@@ -319,10 +321,223 @@ namespace text1
 
             #endregion
 
+            #region 委托、事件 、lambda表达式
 
+            #region 委托
+            //实际上，“定义一个委托”是指“定义一个新类”
+            //使用委托对象IntMethodInvoker(int x)           
+
+            DelegateFuns dfuns = new DelegateFuns();
+            //IntMethodInvoker temp = new IntMethodInvoker(dfuns.SubDisplay);
+
+            //double squNum = DelegateFuns.Square(1.11);
+
+            //temp(3);
+
+            //Action<T> 与 Func<T> 泛型委托
+
+            Func<double, double> func = new Func<double, double>(DelegateFuns.Square);
+
+            //Console.WriteLine(func(3.333).ToString());
+
+
+            //冒泡排序
+            int[] intArr = { 3, 5, 1, 0, 10, 7, 22, 1, 4, 9, 2, 14 };
+
+            for (int i = 0; i < intArr.Length; i++)
+            {
+                Console.Write(intArr[i]);
+                Console.Write(" ");
+            }
+
+            Console.WriteLine($"使用排序算法后的数组为：\n");
+            DelegateFuns.Sort(intArr, 0);
+
+            for (int i = 0; i < intArr.Length; i++)
+            {
+                Console.Write(intArr[i]);
+                Console.Write(" ");
+            }
+
+
+            #endregion
+
+            #region lambda表达式
+
+            #endregion
+
+
+
+            #endregion
+
+
+            #region 字符串和正则表达式
+
+            //C# 中string关键字的映射实际上指向.Net基类 System.String。
+
+            //1、创建字符串
+            //如果多次修改一个字符串，例如，在显示字符串或将其传递给其他方法或者应用前，创建一个较长的字符串，这时候，String类就会变得效率低下；
+            //这种情况，应该使用另一个类，System.Text.StringBuilder，因为它专门为这种情况设计。
+
+            #region 字符串的基本方法
+            string str1 = "123456";
+            string str2 = "Xutao_Forest";
+            //System.String 类
+            //Compare方法：比较字符串的内容，考虑文化背景（区域），或判断某些字符串是否相等；
+            var res1 = String.Compare(str1, str2);
+            Console.WriteLine(res1);
+            //CompareOrdinal方法：与Compare一样，但考虑文化背景
+            var res2 = String.CompareOrdinal(str1, str2);
+            Console.WriteLine(res2);
+            //Concat方法：把多个字符串合并成为一个实例
+            var res3 = String.Concat(str1, str2);
+            Console.WriteLine(res3);
+            //CopyTo方法：把从选定的下标开始的特定数量的字符
+            char[] des = new char[10];
+            str1.CopyTo(0, des, 0, 4);
+            Console.WriteLine(des);
+            //Format方法：格式化包含各种值的字符串和如何格式化每个值的说明
+            var res4 = DateTime.Now;
+            //Console.WriteLine(String.Format("",res4, "{yy-MM-dd}"));
+            Console.WriteLine(res4.ToString("{yyyy-MM-dd}"));
+            //IndexOf方法：定位字符串中第一次出现某个给定字符串或字符的位置
+            var res5 = str1.IndexOf("3");
+            Console.WriteLine(res5);
+            //IndexOfAny方法
+            //LastIndexOf方法
+            //LastIndexOfAny方法
+            //Insert方法:把一个字符串实例插入到另一个字符串实例的指定索引处
+            var res6 = str2.Insert(3, str1);
+            Console.WriteLine(res6);
+            //Join方法：拼接字符串，创建一个新的字符串
+            var res7 = String.Join('-', new string[] { str1, str2 });
+            Console.WriteLine(res7);
+            //PadLef方法：在字符串的左侧，通过添加指定的重复字符填充字符串；
+            var res8 = str1.PadLeft(10, '-');
+            Console.WriteLine("res8 : " + res8);
+            //PadRight方法：在字符串的右侧，通过添加指定的重复字符填充字符串；
+            var res9 = str1.PadRight(10, '-');
+            Console.WriteLine("res9 : " + res9);
+            //Replace方法：用另一个字符或者子字符串替换字符串中给定的字符或者子字符串
+            var res10 = res9.Replace('-', '+');
+            Console.WriteLine(res10);
+            //Split方法：在出现给定字符的地方，把字符串分拆为一个子字符串数组
+            string[] res11 = str2.Split('_');
+            //Substring方法：在字符串中检索给定位置的字符串
+            var res12 = str1.Substring(1, 2);
+            Console.WriteLine(res12);
+            //ToLower方法：将字符串中的字符转小写；
+            //ToUpper方法：将字符串中的字符转大写；
+            //Trim方法：删除首位空白的字符；
+            var res13 = "  1155777_3  ".Trim();
+            Console.WriteLine(res13);
+            #endregion
+
+            #region 使用StringBuilder类
+            #region 为何要使用StringBuilder
+            //问题：重复修改给定的字符串，效率很低，它(已声明的字符串)实际上是一个不可变的数据类型，一旦队字符串对象进行了初始化，该字符串对象就不能改变了；
+            //注意：表面上修改字符串内容的方法和运算符，实际上创建一个新的字符串，根据需要，可以把旧的字符串的内容复制到新的字符串中；
+            //在声明一个字符串的时候，.Net运行时会为该字符串分配一个足够大的内存来保存这个文本，再设置给定的变量，来表示这个字符串实例；
+            //下面的例子中replace方法使用了26次，每一次都创建一个新的字符串存储103个字符，显然将会遇到严重的性能问题
+            string greetingText = "Hello from all the guys at Wrox Press. ";
+            greetingText += "We do hope you enjoy this book as much as we enjoy writing it.";
+
+            Console.WriteLine("greetingText:\n" + greetingText);
+            for (int i = 'z'; i >= 'a'; i--)
+            {
+                char oldchar = (char)i;
+                char newchar = (char)(i + 1);
+                greetingText = greetingText.Replace(oldchar, newchar);
+            }
+
+            for (int i = 'Z'; i >= 'A'; i--)
+            {
+                char oldchar = (char)i;
+                char newchar = (char)(i + 1);
+                greetingText = greetingText.Replace(oldchar, newchar);
+            }
+
+            Console.WriteLine("Encoded:\n" + greetingText);
+
+            #endregion
+
+            #region StringBuilder
+            //1、StringBuilder类通常分配的内存比它需要使用的更多；
+            //2、开发人员可以一开始指定StringBuilder分配多少内存，但如果没有指定，在默认情况下就会根据初始化StringBuilder实例时字符串长度来确定内存大小；
+            //设置初始容量为150;理论可以给StringBuilder 最大在容量为20亿个字符长度，系统内存不一定足够
+            StringBuilder greetingTextNew = new StringBuilder("Hello from all the guys at Wrox Press. ", 150);
+            greetingTextNew.Append("We do hope you enjoy this book as much as we enjoy writing it.");
+            string greetingTextStr = greetingTextNew.ToString();
+            Console.WriteLine("greetingTextStr: \n" + greetingTextStr);
+
+            for (int i = 'z'; i >= 'a'; i--)
+            {
+                char oldchar = (char)i;
+                char newchar = (char)(i + 1);
+                greetingTextNew = greetingTextNew.Replace(oldchar, newchar);
+            }
+            for (int i = 'Z'; i >= 'A'; i--)
+            {
+                char oldchar = (char)i;
+                char newchar = (char)(i + 1);
+                greetingTextNew = greetingTextNew.Replace(oldchar, newchar);
+            }
+
+            Console.WriteLine("Encoded:\n" + greetingTextNew.ToString());
+
+            #endregion
+
+            #region StringBuilder 成员
+            //Append() 给当前字符串追加一个字符串
+            //AppendFormat() 追加特定格式的字符串
+            //Insert() 在当前字符串中插入一个子字符串
+            //Remove() 从当前字符串中删除字符
+            //Replace() 在当前字符串中，用某个字符全部替换另一个字符串；或用当前字符串中的一个子字符串全部替换另一个字符串
+            //ToString() 返回当前强制转换为System.String对象的字符串
+
+            #endregion
+            #endregion
+
+            #region 格式字符串
+            string formatstr1 = DateTime.Now.ToString("yyyy-MM-dd");
+            Console.WriteLine(formatstr1);
+            Console.WriteLine("The double is {0,10:E} and the int contains {1}.", 123456, 22);
+
+            //格式化对象均实现了IFormatable 接口
+            //IFormatable接口只定义了一个方法，该方法也命名为ToString()；它带有2个参数
+
+            #region 字符串格式化过程
+
+            #endregion
+
+            #endregion
+
+            #region 正则表达式
+
+            MatchCollection matchres = Regex.Matches(greetingText, "j", RegexOptions.IgnoreCase);
+
+            foreach (Match item in matchres)
+            {
+                Console.WriteLine(item.Index + "-" + item.ToString());
+            }
+
+            #endregion
+
+            #endregion
+
+
+            var person = new Person("Xutao", "Forest", 30);
+            Console.WriteLine(person.ToString());
+
+            GC.Collect();
 
             Console.ReadKey();
         }
+
+
+        //声明委托，使用delegate关键字
+        delegate void IntMethodInvoker(int x);
+
 
         //创建结构体struct 测试VPN代理            
         public struct Dimensions
@@ -335,7 +550,6 @@ namespace text1
                 Width = width;
             }
         }
-
 
         public class Person
         {
